@@ -144,7 +144,7 @@ function ReportDetailScreen({ report:r, onBack }) {
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:8}}>
           {[
             {val:`${r.totalHours}h`,lbl:"TEAM HOURS",bg:"#fdf4ff",col:"#9333ea"},
-            {val:r.totalDogs,lbl:`${r.totalSlots} SLOTS`,bg:"#fef3c7",col:"#b45309"},
+            {val:r.totalDogs,lbl:`DOGS · ${r.totalSlots} SLOTS`,bg:"#fef3c7",col:"#b45309"},
             {val:r.groomers.length,lbl:"GROOMERS",bg:"#f5f3ff",col:C.purple},
           ].map((s,i)=>(
             <div key={i} style={{backgroundColor:s.bg,borderRadius:8,padding:"8px 6px",textAlign:"center"}}>

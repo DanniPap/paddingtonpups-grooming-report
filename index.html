@@ -28,6 +28,18 @@ const _storage = {
   }
 };
 
+// ── Google Sheets sync ───────────────────────────────────────────
+const GROOMING_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6fDeku6udgbZDcc_T3gWEZs5PCtGs5l1NJ5p6xSt7vHEufHuRM1BZjpKUSq6UeU-e/exec';
+
+async function syncToSheets(key, report) {
+  try {
+    const payload = encodeURIComponent(JSON.stringify({ key, report }));
+    await fetch(GROOMING_SCRIPT_URL + '?action=saveGrooming&data=' + payload);
+  } catch(e) {
+    console.warn('Sheets sync failed:', e);
+  }
+}
+
 function downloadCSV(reports) {
   const blob = new Blob([buildCSV(reports)], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
@@ -405,6 +417,7 @@ function App() {
       const key=editingKey||`groom:${date}-${Date.now()}`;
       const rk={...report,_storageKey:key};
       await _storage.set(key,JSON.stringify(rk));
+      syncToSheets(key, rk);
       setReports(prev=>editingKey?prev.map(r=>r._storageKey===editingKey?rk:r):[...prev,rk]);
       setLastReport(rk);setEditingKey(null);setSubmitted(true);
     }catch(e){alert("Save failed: "+e.message);}
